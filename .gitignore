@@ -57,3 +57,9 @@ buck-out/
 
 # CocoaPods
 /ios/Pods/
+
+# aws keys
+*.pem
+
+# aws login scripts
+awsmongo.sh
