@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 // import {
 //   View,
 //   Text,
@@ -10,26 +10,15 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Home from './src/components/Home';
-import Todos from './src/components/Todos';
+import { Projects, ProjectStackNavigation } from './src/components/Projects';
 import Stats from './src/components/Stats';
 
 // const Stack = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
 
-// export default function App() {
-//   return (
-//     <NavigationContainer>
-//       <Stack.Navigator>
-//         {/* routes: */}
-//         <Stack.Screen name="Home" component={Home} options={{ title: 'Overview' }} />
-//         <Stack.Screen name="Screen1" component={Screen1} options={{ title: 'Screen 1' }} />
-//       </Stack.Navigator>
-//     </NavigationContainer>
-//   );
-// }
-
 export default function App() {
+  const [username, setUsername] = useState('lukehatcher');
   return (
     <NavigationContainer>
       <Tab.Navigator>
@@ -45,8 +34,8 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="Todos"
-          component={Todos}
+          name="Projects"
+          component={ProjectStackNavigation} // projects stack
           options={{
             title: 'Projects',
             tabBarIcon: ({ color, size }) => ( // destruc. default options
