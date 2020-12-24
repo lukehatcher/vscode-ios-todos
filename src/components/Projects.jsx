@@ -1,58 +1,87 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  View, Text, StyleSheet, FlatList, TouchableOpacity,
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  ScrollView,
+  Button,
 } from 'react-native';
-import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import axios from 'axios';
 import Todos from './Todos';
 
 const ProjectStack = createStackNavigator();
 
 const styles = StyleSheet.create({
-  projects: {
-    paddingTop: 60,
+  view: {
     flex: 1,
+    flexDirection: 'row',
+    // height: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'grey',
+    borderBottomColor: 'gray',
+    borderBottomWidth: 1,
   },
-  project: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    // width: '100%',
-    // alignSelf: 'stretch',
-    backgroundColor: 'white',
+  text: {
+    textAlign: 'center',
+    fontSize: 20,
+    flex: 1,
+    padding: 15,
+    // flexDirection: 'row',
   },
 });
 
-export function Projects({ route, navigation}) {
-  // const { id, content } = route.params;
-  // console.log(id, content);
-  const ex = [{ projectName: 'app1' }, { projectName: 'app2' }, { projectName: 'app3' }];
+export function Projects({ route, navigation }) {
+  // console.log(route.params);
+  // const { passedState } = route.params;
+  const [userData, setUserData] = useState([]);
+  const [ready, setReady] = useState(false); // only when
+  const placeholder = 'jon doe';
+  useEffect(() => {
+    axios.get(`http://localhost:3001/api/projects/get/${placeholder}`)
+      .then((response) => {
+        setUserData(response.data);
+        setReady(true);
+        console.log('Projects.jsx useEffect fired');
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
   return (
-    <View style={styles.projects}>
-      <FlatList
-        data={ex}
-        keyExtractor={(item) => (item._id)}
-        renderItem={({ item }) => (
+    <View key={userData}>
+      <ScrollView>
+        {ready && userData.projects.map((item) => ( // MAJOR KEY
           <TouchableOpacity
-            key={item._id}
-            style={styles.project}
-            onPress={() => navigation.navigate('Todos')}
+            key={Math.random()}
+            style={styles.view}
+            onPress={() => navigation.navigate('Todos', { projectTodos: item })}
           >
-            <Text key={item._id}>{item.projectName}</Text>
+            <Text style={styles.text}>{item.projectName}</Text>
+            <Button
+              title="X"
+              onPress={(() => {
+                // delete todo
+              })}
+            />
           </TouchableOpacity>
-        )}
-      />
+        ))}
+      </ScrollView>
     </View>
   );
 }
 
-export function ProjectStackNavigation() {
+export function ProjectStackNavigation({ route }) {
+  // const { passedState } = route.params;
   return (
     <ProjectStack.Navigator>
-      <ProjectStack.Screen name="Projects" component={Projects} />
+      <ProjectStack.Screen
+        name="Projects"
+        component={Projects}
+        // initialParams={{ passedState: passedState }}
+      />
       <ProjectStack.Screen name="Todos" component={Todos} />
     </ProjectStack.Navigator>
   );

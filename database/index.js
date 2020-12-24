@@ -29,7 +29,23 @@ const exData = {
   username: 'jon doe',
   projects: [{
     projectName: 'app1',
-    todos: ['fix errors', 'check linter', 'install packages'],
+    todos: ['fix errors',
+      'check linter',
+      'install packages',
+      'do things',
+      'run',
+      'up',
+      'a',
+      'b',
+      'c',
+      'd',
+      'e',
+      'efefe',
+      'sssss',
+      'sdfsfdsfs',
+      'dfdfdfdfdfn',
+      'f', 'ff', 'k', 'kk', 'gg', 'dfsg', 'sdfgds', 'wrva', 'asd', 'rewrw', 'werwrewr', 'asfdg', 'asdfas',
+    ],
   },
   {
     projectName: 'app2',
@@ -40,13 +56,22 @@ const exData = {
 const initUserdata = async (data) => {
   // would want to init once user signs up
   const doc = new UserInfo(data);
-  doc.save()
-    .catch((err) => {
-      console.error('error saving doc', err);
-    });
+  try {
+    await doc.save();
+  } catch (err) {
+    console.error(err);
+  }
 };
 
-initUserdata(exData);
+const getUserData = async (user) => {
+  try {
+    const result = await UserInfo.findOne({ username: user });
+    console.log(result);
+    return result;
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 const addProject = async (data) => {
   // based off username... find that users doc
@@ -58,12 +83,23 @@ const addProjectTodo = async (data) => {
   // push that todo onto the end of that projects todo array
 };
 
-const getData = async (user) => {
-  try {
-    const result = await UserInfo.findOne({ username: user });
-    console.log(result.projects);
-  } catch (err) {
-    console.error(err);
-  }
+const deleteTodo = async (user, project, todo) => {
+  const doc = await UserInfo.findOne({ username: user });
+  console.log(doc);
+  const projectIdx = doc.projects.findIndex((item) => item.projectName === project);
+  console.log(projectIdx);
+  console.log(doc.projects[projectIdx].todos);
+  const todoIdx = doc.projects[projectIdx].todos.findIndex((item) => item === todo);
+  doc.projects[projectIdx].todos.splice(todoIdx, 1);
+  await doc.save();
 };
-// getData('lukehatcher');
+
+initUserdata(exData);
+// getUserData('jon doe');
+// deleteTodo('jon doe2', 'app1', 'install packages');
+
+module.exports = {
+  initUserdata,
+  getUserData,
+  deleteTodo,
+};
