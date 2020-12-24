@@ -25,34 +25,6 @@ const userInfoSchema = new mongoose.Schema({ // for post only
 
 const UserInfo = mongoose.model('userInfo', userInfoSchema);
 
-const exData = {
-  username: 'jon doe',
-  projects: [{
-    projectName: 'app1',
-    todos: ['fix errors',
-      'check linter',
-      'install packages',
-      'do things',
-      'run',
-      'up',
-      'a',
-      'b',
-      'c',
-      'd',
-      'e',
-      'efefe',
-      'sssss',
-      'sdfsfdsfs',
-      'dfdfdfdfdfn',
-      'f', 'ff', 'k', 'kk', 'gg', 'dfsg', 'sdfgds', 'wrva', 'asd', 'rewrw', 'werwrewr', 'asfdg', 'asdfas',
-    ],
-  },
-  {
-    projectName: 'app2',
-    todos: ['fix more errors', 'configure files', 'delete comments', 'fix bug on line 55'],
-  }],
-};
-
 const initUserdata = async (data) => {
   // would want to init once user signs up
   const doc = new UserInfo(data);
@@ -66,7 +38,6 @@ const initUserdata = async (data) => {
 const getUserData = async (user) => {
   try {
     const result = await UserInfo.findOne({ username: user });
-    console.log(result);
     return result;
   } catch (err) {
     console.error(err);
@@ -85,16 +56,28 @@ const addProjectTodo = async (data) => {
 
 const deleteTodo = async (user, project, todo) => {
   const doc = await UserInfo.findOne({ username: user });
-  console.log(doc);
-  const projectIdx = doc.projects.findIndex((item) => item.projectName === project);
-  console.log(projectIdx);
-  console.log(doc.projects[projectIdx].todos);
-  const todoIdx = doc.projects[projectIdx].todos.findIndex((item) => item === todo);
+  const projectIdx = doc.projects
+    .findIndex((item) => item.projectName === project);
+  const todoIdx = doc.projects[projectIdx].todos
+    .findIndex((item) => item === todo);
   doc.projects[projectIdx].todos.splice(todoIdx, 1);
   await doc.save();
 };
 
-initUserdata(exData);
+const exData = {
+  username: 'jon doe',
+  projects: [{
+    projectName: 'app1',
+    todos: ['fix errors', 'check linter', 'install packages', 'do things', 'run', 'up', 'a', 'b', 'c', 'd', 'e', 'efefe', 'sssss', 'sdfsfdsfs', 'dfdfdfdfdfn',
+    ],
+  },
+  {
+    projectName: 'app2',
+    todos: ['fix more errors', 'configure files', 'delete comments', 'fix bug on line 55'],
+  }],
+};
+
+// initUserdata(exData);
 // getUserData('jon doe');
 // deleteTodo('jon doe2', 'app1', 'install packages');
 

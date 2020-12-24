@@ -22,7 +22,6 @@ app.get('/api/projects/get/:username', (req, res) => {
 app.delete('/api/projects/delete', (req, res) => {
   const { username, projectName, todo } = req.query;
   // these logs show up in the server vscode terminal
-  console.log(username, projectName, todo);
   db.deleteTodo(username, projectName, todo)
     .then(() => {
       console.log('database todo deletion sucess');

@@ -32,21 +32,17 @@ const styles = StyleSheet.create({
 export default function Todos({ route }) {
   const { projectTodos } = route.params;
   const [todosState, setTodosState] = useState([]);
-  const [ready, setReady] = useState(false); // only when
-  // setTodosState(projectTodos);
-
-  function fetchTodos() {
-    // update and rerender
-  }
+  // needed random state change to refresh with leaving screen, setTodosState was not working
+  const [refresh, setRefresh] = useState(1);
+  const [ready, setReady] = useState(false); // true when api call finished
 
   useEffect(() => {
     setTodosState(projectTodos);
     setReady(true);
   }, []);
+
   return (
     <View key={todosState}>
-      {console.log('rendered todos list')}
-      {console.log(todosState)}
       <ScrollView key={todosState}>
         {ready && todosState.todos.map((item) => (
           <TouchableOpacity key={Math.random()} style={styles.view}>
@@ -66,6 +62,8 @@ export default function Todos({ route }) {
                     const idx = oldTodos.findIndex((i) => i === item);
                     todosState.todos.splice(idx, 1);
                     setTodosState(todosState);
+                    const refresher = refresh + 1;
+                    setRefresh(refresher);
                   })
                   .catch((err) => {
                     console.error('error deleting', err);
