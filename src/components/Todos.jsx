@@ -41,6 +41,29 @@ export default function Todos({ route }) {
     setReady(true);
   }, []);
 
+  function handleTodoDelete(todoString) {
+    axios.delete('http://localhost:3001/api/projects/delete', {
+      params: {
+        username: 'jon doe', // hard coded username for now
+        projectName: todosState.projectName,
+        todo: todoString,
+      },
+    })
+      .then(() => {
+        const oldTodos = todosState.todos;
+        const idx = oldTodos.findIndex((i) => i === todoString);
+        todosState.todos.splice(idx, 1);
+        // doesnt trigger rerender for some reason
+        setTodosState(todosState);
+        // triggers rerender (redundant)
+        const refresher = refresh + 1;
+        setRefresh(refresher);
+      })
+      .catch((err) => {
+        console.error('error deleting', err);
+      });
+  }
+
   return (
     <View key={todosState}>
       <ScrollView key={todosState}>
@@ -50,24 +73,7 @@ export default function Todos({ route }) {
             <Button
               title="X"
               onPress={(() => {
-                axios.delete('http://localhost:3001/api/projects/delete', {
-                  params: {
-                    username: 'jon doe',
-                    projectName: todosState.projectName,
-                    todo: item,
-                  },
-                })
-                  .then(() => {
-                    const oldTodos = todosState.todos;
-                    const idx = oldTodos.findIndex((i) => i === item);
-                    todosState.todos.splice(idx, 1);
-                    setTodosState(todosState);
-                    const refresher = refresh + 1;
-                    setRefresh(refresher);
-                  })
-                  .catch((err) => {
-                    console.error('error deleting', err);
-                  });
+                handleTodoDelete(item);
               })}
             />
           </TouchableOpacity>
