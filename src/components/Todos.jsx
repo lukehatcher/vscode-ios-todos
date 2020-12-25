@@ -44,7 +44,7 @@ export default function Todos({ route }) {
   function handleTodoDelete(todoString) {
     axios.delete('http://localhost:3001/api/projects/delete', {
       params: {
-        type: 'todo', // edited after initial working commit for this section
+        type: 'todo',
         username: 'jon doe', // hard coded username for now
         projectName: todosState.projectName,
         todo: todoString,
@@ -60,7 +60,7 @@ export default function Todos({ route }) {
         setRefresh(refresher);
       })
       .catch((err) => {
-        console.error('error deleting', err);
+        console.error('error deleting todo', err);
       });
   }
 
