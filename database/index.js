@@ -64,22 +64,33 @@ const deleteTodo = async (user, project, todo) => {
   await doc.save();
 };
 
-const exData = {
-  username: 'jon doe',
-  projects: [{
-    projectName: 'app1',
-    todos: ['fix errors', 'check linter', 'install packages', 'do things', 'run', 'up', 'a', 'b', 'c', 'd', 'e', 'efefe', 'sssss', 'sdfsfdsfs', 'dfdfdfdfdfn',
-    ],
-  },
-  {
-    projectName: 'app2',
-    todos: ['fix more errors', 'configure files', 'delete comments', 'fix bug on line 55'],
-  }],
+const deleteProject = async (user, project) => {
+  const doc = await UserInfo.findOne({ username: user });
+  const projectIdx = doc.projects
+    .findIndex((item) => item.projectName === project);
+  doc.projects.splice(projectIdx, 1);
+  await doc.save();
 };
 
+// example data for testing database functions
+// const exData = {
+//   username: 'jon doe',
+//   projects: [{
+//     projectName: 'app1',
+//     todos: ['fix errors', 'check linter', 'install packages', 'do things', 'run', 'up', 'a', 'b', 'c', 'd', 'e', 'efefe', 'sssss', 'sdfsfdsfs', 'dfdfdfdfdfn',
+//     ],
+//   },
+//   {
+//     projectName: 'app2',
+//     todos: ['fix more errors', 'configure files', 'delete comments', 'fix bug on line 55'],
+//   }],
+// };
+
+// example calls to test database functions
 // initUserdata(exData);
 // getUserData('jon doe');
 // deleteTodo('jon doe2', 'app1', 'install packages');
+// deleteProject('jon doe', 'app2');
 
 module.exports = {
   initUserdata,
