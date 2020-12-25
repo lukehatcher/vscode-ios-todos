@@ -44,14 +44,14 @@ export default function Todos({ route }) {
   function handleTodoDelete(todoString) {
     axios.delete('http://localhost:3001/api/projects/delete', {
       params: {
+        type: 'todo', // edited after initial working commit for this section
         username: 'jon doe', // hard coded username for now
         projectName: todosState.projectName,
         todo: todoString,
       },
     })
       .then(() => {
-        const oldTodos = todosState.todos;
-        const idx = oldTodos.findIndex((i) => i === todoString);
+        const idx = todosState.todos.findIndex((i) => i === todoString);
         todosState.todos.splice(idx, 1);
         // doesnt trigger rerender for some reason
         setTodosState(todosState);

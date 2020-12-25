@@ -10,6 +10,7 @@ app.use(express.json());
 
 app.get('/api/projects/get/:username', (req, res) => {
   const { username } = req.params;
+
   db.getUserData(username)
     .then((data) => {
       res.send(data);
@@ -20,16 +21,27 @@ app.get('/api/projects/get/:username', (req, res) => {
 });
 
 app.delete('/api/projects/delete', (req, res) => {
-  const { username, projectName, todo } = req.query;
-  // these logs show up in the server vscode terminal
-  db.deleteTodo(username, projectName, todo)
-    .then(() => {
-      console.log('database todo deletion sucess');
-      res.sendStatus(201);
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+  const { type, username, projectName, todo } = req.query;
+
+  if (type === 'todo') { // just deleting a todo from a project
+    db.deleteTodo(username, projectName, todo)
+      .then(() => {
+        console.log('database todo deletion sucess');
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  } else if (type === 'project') { // deleting whole project
+    db.deleteProject(username, projectName)
+      .then(() => {
+        console.log('database project deletion success');
+        res.sendStatus(201);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
 });
 
 // app.post('/api/projects/post/:username', (req, res) => {

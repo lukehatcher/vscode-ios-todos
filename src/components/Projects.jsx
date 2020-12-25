@@ -39,6 +39,7 @@ export function Projects({ route, navigation }) {
   const [userData, setUserData] = useState([]);
   const [ready, setReady] = useState(false); // only when
   const placeholder = 'jon doe';
+
   useEffect(() => {
     axios.get(`http://localhost:3001/api/projects/get/${placeholder}`)
       .then((response) => {
@@ -50,6 +51,27 @@ export function Projects({ route, navigation }) {
         console.error(err);
       });
   }, []);
+
+  function handleProjectDeletion(projectString) {
+    axios.delete('http://localhost:3001/api/projects/delete', {
+      params: {
+        type: 'project',
+        username: 'jon doe', // hardcoded for now
+        projectName: projectString,
+        todo: null,
+      },
+    })
+      .then(() => {
+        const idx = userData.projects.findIndex((i) => i.projectName === projectString);
+        userData.projects.splice(idx, 1);
+        setUserData(userData);
+        // update state and rerender
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
   return (
     <View key={userData}>
       <ScrollView>
@@ -63,7 +85,7 @@ export function Projects({ route, navigation }) {
             <Button
               title="X"
               onPress={(() => {
-                // delete todo
+                handleProjectDeletion(item.projectName);
               })}
             />
           </TouchableOpacity>
