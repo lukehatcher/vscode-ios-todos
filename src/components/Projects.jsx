@@ -37,6 +37,7 @@ export function Projects({ route, navigation }) {
   // console.log(route.params);
   // const { passedState } = route.params;
   const [userData, setUserData] = useState([]);
+  const [refresh, setRefresh] = useState(1);
   const [ready, setReady] = useState(false); // only when
   const placeholder = 'jon doe';
 
@@ -65,10 +66,12 @@ export function Projects({ route, navigation }) {
         const idx = userData.projects.findIndex((i) => i.projectName === projectString);
         userData.projects.splice(idx, 1);
         setUserData(userData);
-        // update state and rerender
+        // update arbitrary state to force rerender
+        const refresher = refresh + 1;
+        setRefresh(refresher);
       })
       .catch((err) => {
-        console.error(err);
+        console.error('error deleting project', err);
       });
   }
 
@@ -95,14 +98,12 @@ export function Projects({ route, navigation }) {
   );
 }
 
-export function ProjectStackNavigation({ route }) {
-  // const { passedState } = route.params;
+export function ProjectStackNavigation() {
   return (
     <ProjectStack.Navigator>
       <ProjectStack.Screen
         name="Projects"
         component={Projects}
-        // initialParams={{ passedState: passedState }}
       />
       <ProjectStack.Screen name="Todos" component={Todos} />
     </ProjectStack.Navigator>
