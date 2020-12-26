@@ -44,19 +44,28 @@ app.delete('/api/projects/delete', (req, res) => {
   }
 });
 
-// app.post('/api/projects/post/:username', (req, res) => {
-//   const { username } = req.params;
-//   // call db query function here
-//   // res.send query results back
-//   // else catch
-// });
-
-// app.update('/api/projects/:username', (req, res) => {
-//   const { username } = req.params;
-//   // call db query function here
-//   // res.send query results back
-//   // else catch
-// });
+app.post('/api/projects/post', (req, res) => {
+  const { type, username, projectName, todo } = req.query;
+  if (type === 'todo') {
+    db.addTodo(username, projectName, todo)
+      .then(() => {
+        // do
+        res.send(201);
+      })
+      .catch((err) => {
+        console.error('error posting todo to db', err);
+      });
+  } else if (type === 'project') {
+    db.addProject(username, projectName)
+      .then(() => {
+        // do
+        res.send(201);
+      })
+      .catch((err) => {
+        console.error('error posting todo to db', err);
+      });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
