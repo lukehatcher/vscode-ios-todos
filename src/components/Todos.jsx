@@ -4,11 +4,12 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
   TouchableOpacity,
   ScrollView,
   Button,
+  Modal,
 } from 'react-native';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 
 const styles = StyleSheet.create({
   view: {
@@ -26,6 +27,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     // flexDirection: 'row',
+  },
+  plusButton: {
+    alignItems: 'center',
+    padding: 15,
   },
 });
 
@@ -64,21 +69,51 @@ export default function Todos({ route }) {
       });
   }
 
+  function handleTodoAddition(todoString) {
+    axios.post('http://localhost:3001/api/projects/delete', {
+      params: {
+        type: 'todo',
+        username: 'jon doe', // hard coded username for now
+        projectName: todosState.projectName,
+        todo: toString,
+      },
+    })
+      .then(() => {
+        // do things
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
   return (
-    <View key={todosState}>
-      <ScrollView key={todosState}>
-        {ready && todosState.todos.map((item) => (
-          <TouchableOpacity key={Math.random()} style={styles.view}>
-            <Text style={styles.text}>{item}</Text>
-            <Button
-              title="X"
-              onPress={(() => {
-                handleTodoDelete(item);
-              })}
-            />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </View>
+    <ScrollView>
+      <View key={todosState}>
+        {/* <TouchableOpacity style={styles.plusButton}>
+          <Ionicon name="add-circle" size={32} />
+        </TouchableOpacity> */}
+        <ScrollView key={todosState}>
+          {ready && todosState.todos.map((item) => (
+            <TouchableOpacity key={Math.random()} style={styles.view}>
+              <Text style={styles.text}>{item}</Text>
+              <Button
+                title="X"
+                onPress={(() => {
+                  handleTodoDelete(item);
+                })}
+              />
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.plusButton}
+          onPress={() => {
+            handleTodoAddition(); // pass param
+          }}
+        >
+          <Ionicon name="add-circle" size={34} />
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }

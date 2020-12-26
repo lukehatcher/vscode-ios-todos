@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
+import Ionicon from 'react-native-vector-icons/Ionicons';
 import Todos from './Todos';
 
 const ProjectStack = createStackNavigator();
@@ -30,6 +31,10 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     // flexDirection: 'row',
+  },
+  plusButton: {
+    alignItems: 'center',
+    padding: 15,
   },
 });
 
@@ -75,26 +80,40 @@ export function Projects({ route, navigation }) {
       });
   }
 
+  function handleProjectAddition(projectString) {
+    // post to db and update screen state
+  }
+
   return (
-    <View key={userData}>
-      <ScrollView>
-        {ready && userData.projects.map((item) => ( // MAJOR KEY
-          <TouchableOpacity
-            key={Math.random()}
-            style={styles.view}
-            onPress={() => navigation.navigate('Todos', { projectTodos: item })}
-          >
-            <Text style={styles.text}>{item.projectName}</Text>
-            <Button
-              title="X"
-              onPress={(() => {
-                handleProjectDeletion(item.projectName);
-              })}
-            />
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </View>
+    <ScrollView>
+      <View key={userData}>
+        <ScrollView>
+          {ready && userData.projects.map((item) => ( // MAJOR KEY
+            <TouchableOpacity
+              key={Math.random()}
+              style={styles.view}
+              onPress={() => navigation.navigate('Todos', { projectTodos: item })}
+            >
+              <Text style={styles.text}>{item.projectName}</Text>
+              <Button
+                title="X"
+                onPress={(() => {
+                  handleProjectDeletion(item.projectName);
+                })}
+              />
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.plusButton}
+          onPress={() => {
+            handleProjectAddition(); // pass param
+          }}
+        >
+          <Ionicon name="add-circle" size={34} />
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 }
 
