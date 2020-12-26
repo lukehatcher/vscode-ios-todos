@@ -81,7 +81,6 @@ const addTodo = async (user, project, newTodo) => {
 };
 
 // example data for testing database functions
-// ========================================
 // const exData = {
 //   username: 'jon doe',
 //   projects: [{
@@ -96,7 +95,6 @@ const addTodo = async (user, project, newTodo) => {
 // };
 
 // example calls to test database functions
-// ========================================
 // initUserdata(exData);
 // getUserData('jon doe');
 // deleteTodo('jon doe2', 'app1', 'install packages');
