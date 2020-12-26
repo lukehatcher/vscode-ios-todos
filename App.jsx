@@ -14,21 +14,6 @@ import Stats from './src/components/Stats';
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  // const [username, setUsername] = useState('jon doe'); // will hardcode this for now
-  // const [userData, setUserData] = useState([]);
-  // const placeholder = 'jon doe';
-
-  // useEffect(() => {
-  //   axios.get(`http://localhost:3001/api/projects/get/${placeholder}`)
-  //     .then((response) => {
-  //       setUserData(response.data);
-  //       console.log('App.jsx use effect fired');
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // }, []);
-
   return (
     <NavigationContainer>
       <Tab.Navigator>
@@ -45,7 +30,6 @@ export default function App() {
         {/* ================================================== */}
         <Tab.Screen
           name="Projects"
-          // initialParams={{ passedState: userData }} // userData is from effect
           component={ProjectStackNavigation} // projects stack
           options={{
             title: 'Projects',

@@ -132,9 +132,9 @@ export default function Todos({ route }) {
           style={styles.modal}
           animationType="slide"
           visible={modalVisible}
-          onRequestClose={() => {
-            // set state for refresh?
-          }}
+          // onRequestClose={() => {
+          //   // set state for refresh?
+          // }}
         >
           <View style={styles.modal}>
             <TextInput

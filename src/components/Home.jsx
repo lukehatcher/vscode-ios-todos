@@ -2,19 +2,14 @@ import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, Button, TextInput, TouchableOpacity,
 } from 'react-native';
-import { getPixelSizeForLayoutSize } from 'react-native/Libraries/Utilities/PixelRatio';
 
 const styles = StyleSheet.create({
   Home: {
     flex: 1,
     justifyContent: 'center',
-    // alignItems: 'center',
     padding: 15,
-    // backgroundColor: '#181818',
   },
   text: {
-    // fontSize: 25,
-    // color: 'white',
     textAlign: 'center',
   },
   input: {

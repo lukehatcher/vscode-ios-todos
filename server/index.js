@@ -23,7 +23,6 @@ app.get('/api/projects/get/:username', (req, res) => {
 
 app.delete('/api/projects/delete', (req, res) => {
   const { type, username, projectName, todo } = req.query;
-  console.log(req.body);
   if (type === 'todo') { // just deleting a todo from a project
     db.deleteTodo(username, projectName, todo)
       .then(() => {
