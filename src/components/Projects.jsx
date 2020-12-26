@@ -3,10 +3,11 @@ import {
   View,
   Text,
   StyleSheet,
-  FlatList,
+  Modal,
   TouchableOpacity,
   ScrollView,
   Button,
+  TextInput,
 } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
@@ -36,15 +37,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 15,
   },
+  modal: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
-export function Projects({ route, navigation }) {
-  // console.log(route.params);
-  // const { passedState } = route.params;
+export function Projects({ navigation }) {
+  const placeholder = 'jon doe';
   const [userData, setUserData] = useState([]);
   const [refresh, setRefresh] = useState(1);
-  const [ready, setReady] = useState(false); // only when
-  const placeholder = 'jon doe';
+  const [ready, setReady] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [text, setText] = useState('');
 
   useEffect(() => {
     axios.get(`http://localhost:3001/api/projects/get/${placeholder}`)
@@ -81,7 +87,26 @@ export function Projects({ route, navigation }) {
   }
 
   function handleProjectAddition(projectString) {
-    // post to db and update screen state
+    axios.post('http://localhost:3001/api/projects/post', {
+      type: 'project',
+      username: 'jon doe', // hard coded username for now
+      projectName: projectString,
+      todo: null,
+    })
+      .then(() => {
+        const newProject = {
+          projectName: projectString,
+          todos: [],
+        };
+        userData.projects.push(newProject);
+        setUserData(userData);
+        // triggers rerender (redundant)
+        const refresher = refresh + 1;
+        setRefresh(refresher);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }
 
   return (
@@ -107,11 +132,46 @@ export function Projects({ route, navigation }) {
         <TouchableOpacity
           style={styles.plusButton}
           onPress={() => {
-            handleProjectAddition(); // pass param
+            setModalVisible(true);
           }}
         >
           <Ionicon name="add-circle" size={34} />
         </TouchableOpacity>
+        {/* ============ modal ============ */}
+        <Modal
+          style={styles.modal}
+          animationType="slide"
+          visible={modalVisible}
+          // onRequestClose={() => {
+          //   // set state for refresh?
+          // }}
+        >
+          <View style={styles.modal}>
+            <TextInput
+              style={styles.input}
+              onChangeText={(input) => setText(input)}
+              placeholder="add your new todo"
+            />
+            <TouchableOpacity>
+              <Button
+                title="submit"
+                onPress={() => {
+                  setModalVisible(false);
+                  handleProjectAddition(text);
+                }}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Button
+                style={styles.button}
+                title="cancel"
+                onPress={() => {
+                  setModalVisible(false);
+                }}
+              />
+            </TouchableOpacity>
+          </View>
+        </Modal>
       </View>
     </ScrollView>
   );
