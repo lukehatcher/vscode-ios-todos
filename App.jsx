@@ -13,45 +13,6 @@ import Register from './src/components/Register';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-export function Tabs() {
-  return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Home"
-        component={Home}
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, size }) => ( // destruc. default options
-            <Ionicon name="home" size={size} color={color} />
-          ),
-        }}
-      />
-      {/* ================================================== */}
-      <Tab.Screen
-        name="Projects"
-        component={ProjectStackNavigation} // projects stack
-        options={{
-          title: 'Projects',
-          tabBarIcon: ({ color, size }) => ( // destruc. default options
-            <Ionicon name="list" size={size} color={color} />
-          ),
-        }}
-      />
-      {/* ================================================== */}
-      <Tab.Screen
-        name="Stats"
-        component={Stats}
-        options={{
-          title: 'Stats',
-          tabBarIcon: ({ color, size }) => ( // destruc. default options
-            <Ionicon name="analytics" size={size} color={color} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
-}
-
 export default function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   if (!loggedIn) {
@@ -67,8 +28,6 @@ export default function App() {
           <Stack.Screen
             name="register"
             component={Register}
-            // options={{ header: () => null }}
-            // initialParams={{ setState: setLoggedIn }}
           />
         </Stack.Navigator>
       </NavigationContainer>
@@ -77,7 +36,39 @@ export default function App() {
   // else if logged in...
   return (
     <NavigationContainer>
-      <Tabs />
+      <Tab.Navigator>
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            title: 'Home',
+            tabBarIcon: ({ color, size }) => ( // destruc. default options
+              <Ionicon name="home" size={size} color={color} />
+            ),
+          }}
+          initialParams={{ setLoggedInState: setLoggedIn }}
+        />
+        <Tab.Screen
+          name="Projects"
+          component={ProjectStackNavigation} // projects stack
+          options={{
+            title: 'Projects',
+            tabBarIcon: ({ color, size }) => ( // destruc. default options
+              <Ionicon name="list" size={size} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Stats"
+          component={Stats}
+          options={{
+            title: 'Stats',
+            tabBarIcon: ({ color, size }) => ( // destruc. default options
+              <Ionicon name="analytics" size={size} color={color} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
     </NavigationContainer>
   );
 }
