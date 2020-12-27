@@ -21,12 +21,23 @@ app.get('/api/projects/get/:username', (req, res) => {
     });
 });
 
+app.get('/api/projects/validate', (req, res) => {
+  const { userName, passWord } = req.query;
+  db.validateLoginInfo(userName, passWord)
+    .then((response) => {
+      res.send(response); // boolean
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+});
+
 app.delete('/api/projects/delete', (req, res) => {
   const { type, username, projectName, todo } = req.query;
   if (type === 'todo') { // just deleting a todo from a project
     db.deleteTodo(username, projectName, todo)
       .then(() => {
-        console.log('database todo deletion sucess');
+        console.log('database todo deletion sucess'); // jon doe
         res.sendStatus(200);
       })
       .catch((err) => {

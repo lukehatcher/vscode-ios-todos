@@ -17,6 +17,7 @@ db.on('error', (err) => {
 
 const userInfoSchema = new mongoose.Schema({ // for post only
   username: String,
+  password: String,
   projects: [{
     projectName: String,
     todos: [{ type: String }],
@@ -80,27 +81,41 @@ const addTodo = async (user, project, newTodo) => {
   await doc.save();
 };
 
+const validateLoginInfo = async (userName, passWord) => {
+  const validation = await UserInfo.find({ username: userName, password: passWord });
+  return validation.length > 0;
+};
+
 // example data for testing database functions
-// const exData = {
-//   username: 'jon doe',
-//   projects: [{
-//     projectName: 'app1',
-//     todos: ['fix errors', 'check linter', 'install packages', 'do things', 'run', 'up', 'a', 'b', 'c', 'd', 'e', 'efefe', 'sssss', 'sdfsfdsfs', 'dfdfdfdfdfn',
-//     ],
-//   },
-//   {
-//     projectName: 'app2',
-//     todos: ['fix more errors', 'configure files', 'delete comments', 'fix bug on line 55'],
-//   }],
-// };
+const exData = {
+  username: 'jon doe',
+  password: '1234',
+  projects: [{
+    projectName: 'app1',
+    todos: ['fix errors', 'check linter', 'install packages', 'do things', 'run', 'up', 'a', 'b', 'c', 'd', 'e', 'efefe', 'sssss', 'sdfsfdsfs', 'dfdfdfdfdfn',
+    ],
+  },
+  {
+    projectName: 'app2',
+    todos: ['fix more errors', 'configure files', 'delete comments', 'fix bug on line 55'],
+  }],
+};
+
+const exAccountCreation = {
+  username: 'jane doe',
+  password: '1234',
+  projects: [],
+};
 
 // example calls to test database functions
 // initUserdata(exData);
+// initUserdata(exAccountCreation);
+// validateLoginInfo();
 // getUserData('jon doe');
 // deleteTodo('jon doe2', 'app1', 'install packages');
 // deleteProject('jon doe', 'app2');
 // addTodo('jon doe', 'app2', 'center div');
-// addProject('jon doe', 'app3');
+// addProject('jane doe', 'app3');
 
 module.exports = {
   initUserdata,
@@ -109,4 +124,5 @@ module.exports = {
   deleteProject,
   addProject,
   addTodo,
+  validateLoginInfo,
 };
