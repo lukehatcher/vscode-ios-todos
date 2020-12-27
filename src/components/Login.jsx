@@ -3,6 +3,7 @@ import {
   View, TextInput, StyleSheet, Button, TouchableOpacity, LogBox, Alert,
 } from 'react-native';
 import axios from 'axios';
+import auth from '../auth';
 
 const styles = StyleSheet.create({
   view: {
@@ -33,22 +34,27 @@ export default function Login({ route, navigation }) {
   ]);
 
   function handleLoginValidation(user, pass) {
-    let validation;
     axios.get('http://localhost:3001/api/projects/validate', {
       params: {
         userName: user,
         passWord: pass,
       },
     })
-      .then((response) => {
+      .then(async (response) => {
+        // if db user/pass validation returns true
         if (response.data) {
-          setState(true); // jon doe
+          try {
+            await auth.persistLoginInfo(username, password);
+            setState(true);
+          } catch (err) {
+            console.error(err);
+          }
         } else {
-          Alert.alert('Wrong username or password', 'try again');
+          Alert.alert('Invalid username or password', 'please try again');
         }
       })
       .catch((err) => {
-        console.error('error validating login', err);
+        console.error('error validating login', err); // jon doe
       });
   }
 

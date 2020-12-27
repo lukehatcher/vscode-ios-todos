@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  View, Text, StyleSheet, Button, TextInput, TouchableOpacity,
+  View, Text, StyleSheet, Button, TouchableOpacity,
 } from 'react-native';
+import auth from '../auth';
 
 const styles = StyleSheet.create({
   Home: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
     padding: 15,
   },
   text: {
@@ -29,24 +31,41 @@ const styles = StyleSheet.create({
 });
 
 export default function Home({ navigation }) {
-  const [text, setText] = useState('');
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    (async function f() {
+      try {
+        const currentUser = await auth.retreiveLoggedInUser();
+        setUsername(currentUser);
+      } catch (err) {
+        console.error(err);
+      }
+    }());
+  }, []);
+
   return (
     <View style={styles.Home}>
-      <TextInput
-        style={styles.input}
-        onChangeText={(input) => setText(input)}
-        placeholder="username"
-        // value={value}
-      />
-      <Text style={styles.text}>{text}</Text>
-
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => {
-          navigation.navigate('Projects'); // ===== projects stack
-        }}
-      >
-        <Text style={{textAlign: 'center'}}>login</Text>
+      <Text>
+        Welcome
+        {` ${username}`}
+      </Text>
+      <TouchableOpacity>
+        <Button
+          title="logout"
+          onPress={() => {
+            (async function fx() {
+              try {
+                await auth.logoutUser();
+                setUsername('');
+                // and navigate back to homescreen
+              } catch (err) {
+                console.error(err);
+              }
+            }());
+            navigation.navigate('login'); // not working yet
+          }}
+        />
       </TouchableOpacity>
     </View>
   );
