@@ -32,6 +32,23 @@ app.get('/api/projects/validate', (req, res) => {
     });
 });
 
+app.post('/api/projects/init', (req, res) => {
+  const { username, password } = req.body.params;
+  console.log(req.body);
+  const data = {
+    username,
+    password,
+    projects: [],
+  };
+  db.initUserdata(data)
+    .then(() => {
+      res.sendStatus(201);
+    })
+    .catch((err) => {
+      console.error('error initializing user in db', err);
+    });
+});
+
 app.delete('/api/projects/delete', (req, res) => {
   const { type, username, projectName, todo } = req.query;
   if (type === 'todo') { // just deleting a todo from a project
