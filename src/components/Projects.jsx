@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     flexDirection: 'row',
-    // height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: 'gray',
@@ -31,7 +30,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     flex: 1,
     padding: 15,
-    // flexDirection: 'row',
   },
   plusButton: {
     alignItems: 'center',
@@ -113,7 +111,7 @@ export function Projects({ navigation }) {
     <ScrollView>
       <View key={userData}>
         <ScrollView>
-          {ready && userData.projects.map((item) => ( // MAJOR KEY
+          {ready && userData.projects.map((item) => (
             <TouchableOpacity
               key={Math.random()}
               style={styles.view}
@@ -137,14 +135,11 @@ export function Projects({ navigation }) {
         >
           <Ionicon name="add-circle" size={34} />
         </TouchableOpacity>
-        {/* ============ modal ============ */}
+        {/* ============ conditional add-project modal ============ */}
         <Modal
           style={styles.modal}
           animationType="slide"
           visible={modalVisible}
-          // onRequestClose={() => {
-          //   // set state for refresh?
-          // }}
         >
           <View style={styles.modal}>
             <TextInput
@@ -179,7 +174,15 @@ export function Projects({ navigation }) {
 
 export function ProjectStackNavigation() {
   return (
-    <ProjectStack.Navigator>
+    <ProjectStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          backgroundColor: '#9AC4F8',
+        },
+        headerTintColor: 'white',
+        headerBackTitle: 'Back',
+      }}
+    >
       <ProjectStack.Screen
         name="Projects"
         component={Projects}
