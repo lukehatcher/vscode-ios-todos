@@ -8,6 +8,7 @@ import Home from './src/components/Home';
 import { ProjectStackNavigation } from './src/components/Projects';
 import Stats from './src/components/Stats';
 import Login from './src/components/Login';
+import Register from './src/components/Register';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,6 +63,12 @@ export default function App() {
             component={Login}
             options={{ header: () => null }}
             initialParams={{ setState: setLoggedIn }}
+          />
+          <Stack.Screen
+            name="register"
+            component={Register}
+            // options={{ header: () => null }}
+            // initialParams={{ setState: setLoggedIn }}
           />
         </Stack.Navigator>
       </NavigationContainer>
