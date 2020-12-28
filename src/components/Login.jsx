@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 });
 
 export default function Login({ route, navigation }) {
-  const { setState } = route.params;
+  const { setState, setStorage } = route.params;
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -45,7 +45,9 @@ export default function Login({ route, navigation }) {
         if (response.data) {
           try {
             await auth.persistLoginInfo(username, password);
+            setStorage(true);
             setState(true);
+            // update
           } catch (err) {
             console.error(err);
           }
@@ -77,7 +79,7 @@ export default function Login({ route, navigation }) {
       <TouchableOpacity>
         <Button
           title="login"
-          onPress={async () => {
+          onPress={() => {
             handleLoginValidation(username, password);
           }}
         />

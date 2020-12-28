@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function Home({ route, navigation }) {
-  const { setLoggedInState } = route.params;
+export default function Home({ route }) {
+  const { setLoggedInState, setStorage } = route.params;
   const [username, setUsername] = useState('');
 
   useEffect(() => {
@@ -60,6 +60,7 @@ export default function Home({ route, navigation }) {
                 await auth.logoutUser();
                 setUsername('');
                 // and navigate back to homescreen
+                setStorage(false);
                 setLoggedInState(false);
               } catch (err) {
                 console.error(err);

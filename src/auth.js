@@ -14,6 +14,7 @@ async function retreiveLoggedInUser() {
     if (username !== null) {
       return username;
     }
+    return null;
   } catch (err) {
     console.error(err);
   }
