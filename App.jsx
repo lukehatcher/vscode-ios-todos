@@ -1,19 +1,48 @@
 import 'react-native-gesture-handler';
-import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-// import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Home from './src/components/Home';
 import { ProjectStackNavigation } from './src/components/Projects';
 import Stats from './src/components/Stats';
+import Login from './src/components/Login';
+import Register from './src/components/Register';
+import auth from './src/auth';
 
-// const Stack = createStackNavigator();
-
+const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [storageStatus, setStorageStatus] = useState(false);
+
+  useEffect(() => {
+    (async function checkStorage() {
+      const fullStorage = await auth.retreiveLoggedInUser();
+      setStorageStatus(!!fullStorage);
+    }());
+  }, []);
+
+  if (!loggedIn && !storageStatus) { // jon doe
+    return (
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen
+            name="login"
+            component={Login}
+            options={{ header: () => null }}
+            initialParams={{ setState: setLoggedIn, setStorage: setStorageStatus }}
+          />
+          <Stack.Screen
+            name="register"
+            component={Register}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
   return (
     <NavigationContainer>
       <Tab.Navigator>
@@ -26,8 +55,8 @@ export default function App() {
               <Ionicon name="home" size={size} color={color} />
             ),
           }}
+          initialParams={{ setLoggedInState: setLoggedIn, setStorage: setStorageStatus }}
         />
-        {/* ================================================== */}
         <Tab.Screen
           name="Projects"
           component={ProjectStackNavigation} // projects stack
@@ -38,7 +67,6 @@ export default function App() {
             ),
           }}
         />
-        {/* ================================================== */}
         <Tab.Screen
           name="Stats"
           component={Stats}
