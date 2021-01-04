@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   text: {
-    textAlign: 'center',
+    // textAlign: 'center',
     fontSize: 20,
     flex: 1,
     padding: 15,
@@ -119,7 +119,7 @@ export function Projects({ navigation }) {
             >
               <Text style={styles.text}>{item.projectName}</Text>
               <Button
-                title="X"
+                title="🗑"
                 onPress={(() => {
                   handleProjectDeletion(item.projectName);
                 })}
@@ -145,7 +145,7 @@ export function Projects({ navigation }) {
             <TextInput
               style={styles.input}
               onChangeText={(input) => setText(input)}
-              placeholder="add your new todo"
+              placeholder="add a new project"
             />
             <TouchableOpacity>
               <Button

@@ -22,13 +22,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   text: {
-    textAlign: 'center',
+    // textAlign: 'center',
     fontSize: 20,
     flex: 1,
     padding: 15,
   },
   textCompleted: {
-    textAlign: 'center',
+    // textAlign: 'center',
     textDecorationLine: 'line-through',
     fontSize: 20,
     flex: 1,
@@ -105,6 +105,28 @@ export default function Todos({ route }) {
       });
   }
 
+  function handleTodoCompletion(todoString) {
+    axios.put('http://localhost:3001/api/projects/patch', {
+      type: 'todo',
+      username: 'jon doe',
+      projectName: todosState.projectName,
+      todo: todoString,
+    })
+      .then(() => {
+        // update state
+        const idx = todosState.todos.findIndex((item) => item.text === todoString);
+        console.log(idx);
+        todosState.todos[idx].completed = !todosState.todos[idx].completed;
+
+        // triggers rerender (redundant)
+        const refresher = refresh + 1;
+        setRefresh(refresher);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
   return (
     <ScrollView>
       <View key={todosState}>
@@ -116,9 +138,15 @@ export default function Todos({ route }) {
                 {item.text}
               </Text>
               <Button
-                title="&#x2715;" // x
+                title="🗑"
                 onPress={(() => {
                   handleTodoDelete(item.text);
+                })}
+              />
+              <Button
+                title="✅" // 
+                onPress={(() => {
+                  handleTodoCompletion(item.text);
                 })}
               />
             </TouchableOpacity>
