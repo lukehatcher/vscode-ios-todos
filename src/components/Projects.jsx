@@ -55,7 +55,6 @@ export function Projects({ navigation }) {
       .then((response) => {
         setUserData(response.data);
         setReady(true);
-        console.log('Projects.jsx useEffect fired');
       })
       .catch((err) => {
         console.error(err);
@@ -146,6 +145,7 @@ export function Projects({ navigation }) {
               style={styles.input}
               onChangeText={(input) => setText(input)}
               placeholder="add a new project"
+              multiline
             />
             <TouchableOpacity>
               <Button

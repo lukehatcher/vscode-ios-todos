@@ -28,7 +28,6 @@ const styles = StyleSheet.create({
     padding: 15,
   },
   textCompleted: {
-    // textAlign: 'center',
     textDecorationLine: 'line-through',
     fontSize: 20,
     flex: 1,
@@ -165,15 +164,13 @@ export default function Todos({ route }) {
           style={styles.modal}
           animationType="slide"
           visible={modalVisible}
-          // onRequestClose={() => {
-          //   // set state for refresh?
-          // }}
         >
           <View style={styles.modal}>
             <TextInput
               style={styles.input}
               onChangeText={(input) => setText(input)}
               placeholder="add your new todo"
+              multiline
             />
             <TouchableOpacity>
               <Button
