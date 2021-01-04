@@ -97,7 +97,7 @@ app.post('/api/projects/post', (req, res) => {
   }
 });
 
-app.put('/api/projects/patch', (req, res) => {
+app.put('/api/projects/put', (req, res) => {
   const { type, username, projectName, todo } = req.body;
   if (type === 'todo') {
     db.toggleTodoCompletion(username, projectName, todo)

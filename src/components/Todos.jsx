@@ -104,7 +104,7 @@ export default function Todos({ route }) {
   }
 
   function handleTodoCompletion(todoString) {
-    axios.put('http://localhost:3001/api/projects/patch', {
+    axios.put('http://localhost:3001/api/projects/put', {
       type: 'todo',
       username: 'jon doe',
       projectName: todosState.projectName,
