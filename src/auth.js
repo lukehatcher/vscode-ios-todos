@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-async function persistLoginInfo(username, password) {
+export async function persistLoginInfo(username, password) {
   try {
     await AsyncStorage.multiSet([['username', username], ['token', password]]);
   } catch (err) {
@@ -8,7 +8,7 @@ async function persistLoginInfo(username, password) {
   }
 }
 
-async function retreiveLoggedInUser() {
+export async function retreiveLoggedInUser() {
   try {
     const username = await AsyncStorage.getItem('username');
     if (username !== null) {
@@ -20,16 +20,10 @@ async function retreiveLoggedInUser() {
   }
 }
 
-async function logoutUser() {
+export async function logoutUser() {
   try {
     await AsyncStorage.clear();
   } catch (err) {
     console.error(err);
   }
 }
-
-export default {
-  persistLoginInfo,
-  retreiveLoggedInUser,
-  logoutUser,
-};

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, Button, TouchableOpacity,
 } from 'react-native';
-import auth from '../auth';
+import { logoutUser, retreiveLoggedInUser } from '../auth';
 
 const styles = StyleSheet.create({
   Home: {
@@ -37,7 +37,7 @@ export default function Home({ route }) {
   useEffect(() => {
     (async function f() {
       try {
-        const currentUser = await auth.retreiveLoggedInUser();
+        const currentUser = await retreiveLoggedInUser();
         setUsername(currentUser);
       } catch (err) {
         console.error(err);
@@ -57,7 +57,7 @@ export default function Home({ route }) {
           onPress={() => {
             (async function fx() {
               try {
-                await auth.logoutUser();
+                await logoutUser();
                 setUsername('');
                 // and navigate back to homescreen
                 setStorage(false);

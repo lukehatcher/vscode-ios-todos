@@ -11,6 +11,16 @@ import {
   TextInput,
 } from 'react-native';
 import Ionicon from 'react-native-vector-icons/Ionicons';
+import { retreiveLoggedInUser } from '../auth';
+
+retreiveLoggedInUser()
+  .then((response) => {
+    console.log(response);
+    CURRENT_USER = response;
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 const styles = StyleSheet.create({
   view: {
@@ -51,17 +61,25 @@ export default function Todos({ route }) {
   const [ready, setReady] = useState(false); // true when api call finished
   const [modalVisible, setModalVisible] = useState(false);
   const [text, setText] = useState('');
+  let CURRENT_USER;
 
   useEffect(() => {
-    setTodosState(projectTodos); // passed in from projects load
-    setReady(true);
+    retreiveLoggedInUser()
+      .then((response) => {
+        CURRENT_USER = response;
+        setTodosState(projectTodos); // passed in from projects load
+        setReady(true);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, []);
 
   function handleTodoDelete(todoString) { // should still work
     axios.delete('http://localhost:3001/api/projects/delete', {
       params: {
         type: 'todo',
-        username: 'jon doe', // hard coded username for now
+        username: CURRENT_USER,
         projectName: todosState.projectName,
         todo: todoString,
       },
@@ -83,7 +101,7 @@ export default function Todos({ route }) {
   function handleTodoAddition(todoString) {
     axios.post('http://localhost:3001/api/projects/post', {
       type: 'todo',
-      username: 'jon doe', // hard coded username for now
+      username: CURRENT_USER,
       projectName: todosState.projectName,
       todo: todoString,
     })
@@ -106,7 +124,7 @@ export default function Todos({ route }) {
   function handleTodoCompletion(todoString) {
     axios.put('http://localhost:3001/api/projects/put', {
       type: 'todo',
-      username: 'jon doe',
+      username: CURRENT_USER,
       projectName: todosState.projectName,
       todo: todoString,
     })

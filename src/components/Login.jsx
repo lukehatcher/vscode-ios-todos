@@ -3,7 +3,7 @@ import {
   View, TextInput, StyleSheet, Button, TouchableOpacity, LogBox, Alert,
 } from 'react-native';
 import axios from 'axios';
-import auth from '../auth';
+import { persistLoginInfo } from '../auth';
 
 const styles = StyleSheet.create({
   view: {
@@ -12,8 +12,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   input: {
-    // flex: 1,
-    // flexDirection: 'row',
     height: 40,
     width: 300,
     borderRadius: 20,
@@ -44,7 +42,7 @@ export default function Login({ route, navigation }) {
         // if db user/pass validation returns true
         if (response.data) {
           try {
-            await auth.persistLoginInfo(username, password);
+            await persistLoginInfo(username, password);
             setStorage(true);
             setState(true);
             // update
@@ -56,7 +54,7 @@ export default function Login({ route, navigation }) {
         }
       })
       .catch((err) => {
-        console.error('error validating login', err); // jon doe
+        console.error('error validating login', err);
       });
   }
 
