@@ -115,7 +115,7 @@ export function Projects({ navigation }) {
             <TouchableOpacity
               key={Math.random()}
               style={styles.view}
-              onPress={() => navigation.navigate('Todos', { projectTodos: item })}
+              onPress={() => navigation.navigate('Todos', { projectTodos: item })} // pass project todos to todo view
             >
               <Text style={styles.text}>{item.projectName}</Text>
               <Button

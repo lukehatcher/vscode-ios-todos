@@ -16,7 +16,6 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     flexDirection: 'row',
-    // height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: 'gray',
@@ -27,7 +26,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     flex: 1,
     padding: 15,
-    // flexDirection: 'row',
+  },
+  textCompleted: {
+    textAlign: 'center',
+    textDecorationLine: 'line-through',
+    fontSize: 20,
+    flex: 1,
+    padding: 15,
   },
   plusButton: {
     alignItems: 'center',
@@ -38,13 +43,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  // input: {
-  //   height: 40,
-  //   borderColor: 'gray',
-  //   borderWidth: 1,
-  //   borderRadius: 20,
-  //   paddingLeft: 15,
-  // },
 });
 
 export default function Todos({ route }) {
@@ -57,11 +55,11 @@ export default function Todos({ route }) {
   const [text, setText] = useState('');
 
   useEffect(() => {
-    setTodosState(projectTodos);
+    setTodosState(projectTodos); // passed in from projects load
     setReady(true);
   }, []);
 
-  function handleTodoDelete(todoString) {
+  function handleTodoDelete(todoString) { // should still work
     axios.delete('http://localhost:3001/api/projects/delete', {
       params: {
         type: 'todo',
@@ -71,7 +69,7 @@ export default function Todos({ route }) {
       },
     })
       .then(() => {
-        const idx = todosState.todos.findIndex((i) => i === todoString);
+        const idx = todosState.todos.findIndex((todo) => todo.text === todoString); // edited
         todosState.todos.splice(idx, 1);
         // doesnt trigger rerender for some reason
         setTodosState(todosState);
@@ -92,7 +90,11 @@ export default function Todos({ route }) {
       todo: todoString,
     })
       .then(() => {
-        todosState.todos.push(todoString);
+        const todoObj = {
+          text: todoString,
+          commpleted: false,
+        };
+        todosState.todos.push(todoObj);
         setTodosState(todosState);
         // triggers rerender (redundant)
         const refresher = refresh + 1;
@@ -109,11 +111,14 @@ export default function Todos({ route }) {
         <ScrollView key={todosState}>
           {ready && todosState.todos.map((item) => (
             <TouchableOpacity key={Math.random()} style={styles.view}>
-              <Text style={styles.text}>{item}</Text>
+              {/* conditional styling (line through) */}
+              <Text style={item.completed ? styles.textCompleted : styles.text}>
+                {item.text}
+              </Text>
               <Button
-                title="X"
+                title="&#x2715;" // x
                 onPress={(() => {
-                  handleTodoDelete(item);
+                  handleTodoDelete(item.text);
                 })}
               />
             </TouchableOpacity>

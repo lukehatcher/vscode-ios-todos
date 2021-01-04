@@ -145,7 +145,7 @@ const validateLoginInfo = async (userName, passWord) => {
 // initUserdata(exAccountCreation);
 // validateLoginInfo();
 // getUserData('jon doe');
-// deleteTodo('jon doe2', 'app1', 'install packages');
+deleteTodo('jon doe', 'app1', 'build');
 // deleteProject('jon doe', 'app2');
 // addTodo('jon doe', 'app2', 'center div');
 // addProject('jane doe', 'app3');
@@ -159,4 +159,5 @@ module.exports = {
   addProject,
   addTodo,
   validateLoginInfo,
+  toggleTodoCompletion,
 };
