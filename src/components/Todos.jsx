@@ -22,7 +22,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   text: {
-    // textAlign: 'center',
     fontSize: 20,
     flex: 1,
     padding: 15,
@@ -114,7 +113,6 @@ export default function Todos({ route }) {
       .then(() => {
         // update state
         const idx = todosState.todos.findIndex((item) => item.text === todoString);
-        console.log(idx);
         todosState.todos[idx].completed = !todosState.todos[idx].completed;
 
         // triggers rerender (redundant)
@@ -143,7 +141,7 @@ export default function Todos({ route }) {
                 })}
               />
               <Button
-                title="✅" // 
+                title="✅"
                 onPress={(() => {
                   handleTodoCompletion(item.text);
                 })}

@@ -15,7 +15,7 @@ db.on('error', (err) => {
   console.log(err);
 });
 
-const userInfoSchema = new mongoose.Schema({ // for post only
+const userInfoSchema = new mongoose.Schema({
   username: String,
   password: String,
   projects: [{
@@ -30,7 +30,6 @@ const userInfoSchema = new mongoose.Schema({ // for post only
 const UserInfo = mongoose.model('userInfo', userInfoSchema);
 
 const initUserdata = async (data) => {
-  // would want to init once user signs up
   const doc = new UserInfo(data);
   try {
     await doc.save();
@@ -76,7 +75,7 @@ const addProject = async (user, newProject) => {
   await doc.save();
 };
 
-const addTodo = async (user, project, newTodo) => { // todo is a string
+const addTodo = async (user, project, newTodo) => {
   const todoObj = {
     text: newTodo,
     completed: false,
@@ -88,7 +87,7 @@ const addTodo = async (user, project, newTodo) => { // todo is a string
   await doc.save();
 };
 
-const toggleTodoCompletion = async (user, project, todo) => { // brand new
+const toggleTodoCompletion = async (user, project, todo) => {
   const doc = await UserInfo.findOne({ username: user });
   const projectIdx = doc.projects
     .findIndex((item) => item.projectName === project);
@@ -145,7 +144,7 @@ const validateLoginInfo = async (userName, passWord) => {
 // initUserdata(exAccountCreation);
 // validateLoginInfo();
 // getUserData('jon doe');
-deleteTodo('jon doe', 'app1', 'build');
+// deleteTodo('jon doe', 'app1', 'build');
 // deleteProject('jon doe', 'app2');
 // addTodo('jon doe', 'app2', 'center div');
 // addProject('jane doe', 'app3');
