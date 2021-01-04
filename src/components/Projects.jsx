@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   text: {
-    textAlign: 'center',
     fontSize: 20,
     flex: 1,
     padding: 15,
@@ -55,7 +54,6 @@ export function Projects({ navigation }) {
       .then((response) => {
         setUserData(response.data);
         setReady(true);
-        console.log('Projects.jsx useEffect fired');
       })
       .catch((err) => {
         console.error(err);
@@ -115,11 +113,11 @@ export function Projects({ navigation }) {
             <TouchableOpacity
               key={Math.random()}
               style={styles.view}
-              onPress={() => navigation.navigate('Todos', { projectTodos: item })}
+              onPress={() => navigation.navigate('Todos', { projectTodos: item })} // pass project todos to todo view
             >
               <Text style={styles.text}>{item.projectName}</Text>
               <Button
-                title="X"
+                title="🗑"
                 onPress={(() => {
                   handleProjectDeletion(item.projectName);
                 })}
@@ -145,7 +143,8 @@ export function Projects({ navigation }) {
             <TextInput
               style={styles.input}
               onChangeText={(input) => setText(input)}
-              placeholder="add your new todo"
+              placeholder="add a new project"
+              multiline
             />
             <TouchableOpacity>
               <Button

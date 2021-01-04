@@ -97,6 +97,20 @@ app.post('/api/projects/post', (req, res) => {
   }
 });
 
+app.put('/api/projects/patch', (req, res) => {
+  const { type, username, projectName, todo } = req.body;
+  if (type === 'todo') {
+    db.toggleTodoCompletion(username, projectName, todo)
+      .then(() => {
+        res.sendStatus(201);
+      })
+      .catch(() => {
+        console.error('error updating todo completion bool', err);
+        res.sendStatus(400);
+      });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`listening on port ${PORT}`);
 });

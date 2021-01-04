@@ -16,18 +16,21 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     flexDirection: 'row',
-    // height: 40,
     justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: 'gray',
     borderBottomWidth: 1,
   },
   text: {
-    textAlign: 'center',
     fontSize: 20,
     flex: 1,
     padding: 15,
-    // flexDirection: 'row',
+  },
+  textCompleted: {
+    textDecorationLine: 'line-through',
+    fontSize: 20,
+    flex: 1,
+    padding: 15,
   },
   plusButton: {
     alignItems: 'center',
@@ -38,13 +41,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  // input: {
-  //   height: 40,
-  //   borderColor: 'gray',
-  //   borderWidth: 1,
-  //   borderRadius: 20,
-  //   paddingLeft: 15,
-  // },
 });
 
 export default function Todos({ route }) {
@@ -57,11 +53,11 @@ export default function Todos({ route }) {
   const [text, setText] = useState('');
 
   useEffect(() => {
-    setTodosState(projectTodos);
+    setTodosState(projectTodos); // passed in from projects load
     setReady(true);
   }, []);
 
-  function handleTodoDelete(todoString) {
+  function handleTodoDelete(todoString) { // should still work
     axios.delete('http://localhost:3001/api/projects/delete', {
       params: {
         type: 'todo',
@@ -71,7 +67,7 @@ export default function Todos({ route }) {
       },
     })
       .then(() => {
-        const idx = todosState.todos.findIndex((i) => i === todoString);
+        const idx = todosState.todos.findIndex((todo) => todo.text === todoString); // edited
         todosState.todos.splice(idx, 1);
         // doesnt trigger rerender for some reason
         setTodosState(todosState);
@@ -92,8 +88,33 @@ export default function Todos({ route }) {
       todo: todoString,
     })
       .then(() => {
-        todosState.todos.push(todoString);
+        const todoObj = {
+          text: todoString,
+          commpleted: false,
+        };
+        todosState.todos.push(todoObj);
         setTodosState(todosState);
+        // triggers rerender (redundant)
+        const refresher = refresh + 1;
+        setRefresh(refresher);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  function handleTodoCompletion(todoString) {
+    axios.put('http://localhost:3001/api/projects/patch', {
+      type: 'todo',
+      username: 'jon doe',
+      projectName: todosState.projectName,
+      todo: todoString,
+    })
+      .then(() => {
+        // update state
+        const idx = todosState.todos.findIndex((item) => item.text === todoString);
+        todosState.todos[idx].completed = !todosState.todos[idx].completed;
+
         // triggers rerender (redundant)
         const refresher = refresh + 1;
         setRefresh(refresher);
@@ -109,11 +130,20 @@ export default function Todos({ route }) {
         <ScrollView key={todosState}>
           {ready && todosState.todos.map((item) => (
             <TouchableOpacity key={Math.random()} style={styles.view}>
-              <Text style={styles.text}>{item}</Text>
+              {/* conditional styling (line through) */}
+              <Text style={item.completed ? styles.textCompleted : styles.text}>
+                {item.text}
+              </Text>
               <Button
-                title="X"
+                title="🗑"
                 onPress={(() => {
-                  handleTodoDelete(item);
+                  handleTodoDelete(item.text);
+                })}
+              />
+              <Button
+                title="✅"
+                onPress={(() => {
+                  handleTodoCompletion(item.text);
                 })}
               />
             </TouchableOpacity>
@@ -132,15 +162,13 @@ export default function Todos({ route }) {
           style={styles.modal}
           animationType="slide"
           visible={modalVisible}
-          // onRequestClose={() => {
-          //   // set state for refresh?
-          // }}
         >
           <View style={styles.modal}>
             <TextInput
               style={styles.input}
               onChangeText={(input) => setText(input)}
               placeholder="add your new todo"
+              multiline
             />
             <TouchableOpacity>
               <Button
