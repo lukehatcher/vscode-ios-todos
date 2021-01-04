@@ -20,7 +20,10 @@ const userInfoSchema = new mongoose.Schema({ // for post only
   password: String,
   projects: [{
     projectName: String,
-    todos: [{ type: String }],
+    todos: [{
+      text: String,
+      completed: Boolean, // edited
+    }],
   }],
 });
 
@@ -50,7 +53,7 @@ const deleteTodo = async (user, project, todo) => {
   const projectIdx = doc.projects
     .findIndex((item) => item.projectName === project);
   const todoIdx = doc.projects[projectIdx].todos
-    .findIndex((item) => item === todo);
+    .findIndex((item) => item.text === todo); // edited
   doc.projects[projectIdx].todos.splice(todoIdx, 1);
   await doc.save();
 };
@@ -73,11 +76,26 @@ const addProject = async (user, newProject) => {
   await doc.save();
 };
 
-const addTodo = async (user, project, newTodo) => {
+const addTodo = async (user, project, newTodo) => { // todo is a string
+  const todoObj = {
+    text: newTodo,
+    completed: false,
+  };
   const doc = await UserInfo.findOne({ username: user });
   const projectIdx = doc.projects
     .findIndex((item) => item.projectName === project);
-  doc.projects[projectIdx].todos.push(newTodo);
+  doc.projects[projectIdx].todos.push(todoObj);
+  await doc.save();
+};
+
+const toggleTodoCompletion = async (user, project, todo) => { // brand new
+  const doc = await UserInfo.findOne({ username: user });
+  const projectIdx = doc.projects
+    .findIndex((item) => item.projectName === project);
+  const todoIdx = doc.projects[projectIdx].todos
+    .findIndex((item) => item.text === todo);
+  const oldState = doc.projects[projectIdx].todos[todoIdx].completed;
+  doc.projects[projectIdx].todos[todoIdx].completed = !oldState;
   await doc.save();
 };
 
@@ -86,28 +104,43 @@ const validateLoginInfo = async (userName, passWord) => {
   return validation.length > 0;
 };
 
-// example data for testing database functions
-const exData = {
-  username: 'jon doe',
-  password: '1234',
-  projects: [{
-    projectName: 'app1',
-    todos: ['fix errors', 'check linter', 'install packages', 'do things', 'run', 'up', 'a', 'b', 'c', 'd', 'e', 'efefe', 'sssss', 'sdfsfdsfs', 'dfdfdfdfdfn',
-    ],
-  },
-  {
-    projectName: 'app2',
-    todos: ['fix more errors', 'configure files', 'delete comments', 'fix bug on line 55'],
-  }],
-};
+// ==== example data for testing database functions ====
+// const exData = {
+//   username: 'jon doe',
+//   password: '1234',
+//   projects: [{
+//     projectName: 'app1',
+//     todos: [
+//       { text: 'build', completed: false },
+//       { text: 'edit', completed: false },
+//       { text: 'compile', completed: true },
+//       { text: 'run linter', completed: false },
+//       { text: 'do things', completed: false },
+//       { text: 'do more things', completed: true },
+//       { text: 'run app', completed: false },
+//       { text: 'hotspot', completed: false },
+//       { text: 'run car', completed: true },
+//       { text: 'run build', completed: false },
+//     ],
+//   },
+//   {
+//     projectName: 'app2',
+//     todos: [
+//       { text: 'fix more errors', completed: false },
+//       { text: 'fix more errors', completed: false },
+//       { text: 'delete comments', completed: true },
+//       { text: 'fix bug on line 55', completed: false },
+//     ],
+//   }],
+// };
 
-const exAccountCreation = {
-  username: 'jane doe',
-  password: '1234',
-  projects: [],
-};
+// const exAccountCreation = {
+//   username: 'jane doe',
+//   password: '1234',
+//   projects: [],
+// };
 
-// example calls to test database functions
+// ==== example calls to test database functions ====
 // initUserdata(exData);
 // initUserdata(exAccountCreation);
 // validateLoginInfo();
@@ -116,6 +149,7 @@ const exAccountCreation = {
 // deleteProject('jon doe', 'app2');
 // addTodo('jon doe', 'app2', 'center div');
 // addProject('jane doe', 'app3');
+// toggleTodoCompletion('jon doe', 'app1', 'build');
 
 module.exports = {
   initUserdata,
