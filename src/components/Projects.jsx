@@ -13,6 +13,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import Todos from './Todos';
+import { retreiveLoggedInUser } from '../auth';
 
 const ProjectStack = createStackNavigator();
 
@@ -42,18 +43,29 @@ const styles = StyleSheet.create({
 });
 
 export function Projects({ navigation }) {
-  const placeholder = 'jon doe';
   const [userData, setUserData] = useState([]);
   const [refresh, setRefresh] = useState(1);
   const [ready, setReady] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [text, setText] = useState('');
+  let CURRENT_USER;
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/api/projects/get/${placeholder}`)
+    function fetch() {
+      axios.get(`http://localhost:3001/api/projects/get/${CURRENT_USER}`)
+        .then((response) => {
+          setUserData(response.data);
+          setReady(true);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+
+    retreiveLoggedInUser()
       .then((response) => {
-        setUserData(response.data);
-        setReady(true);
+        CURRENT_USER = response;
+        fetch();
       })
       .catch((err) => {
         console.error(err);
@@ -64,7 +76,7 @@ export function Projects({ navigation }) {
     axios.delete('http://localhost:3001/api/projects/delete', {
       params: {
         type: 'project',
-        username: 'jon doe', // hardcoded for now
+        username: CURRENT_USER,
         projectName: projectString,
         todo: null,
       },
@@ -85,7 +97,7 @@ export function Projects({ navigation }) {
   function handleProjectAddition(projectString) {
     axios.post('http://localhost:3001/api/projects/post', {
       type: 'project',
-      username: 'jon doe', // hard coded username for now
+      username: CURRENT_USER,
       projectName: projectString,
       todo: null,
     })

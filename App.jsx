@@ -9,7 +9,7 @@ import { ProjectStackNavigation } from './src/components/Projects';
 import Stats from './src/components/Stats';
 import Login from './src/components/Login';
 import Register from './src/components/Register';
-import auth from './src/auth';
+import { retreiveLoggedInUser } from './src/auth';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -20,7 +20,7 @@ export default function App() {
 
   useEffect(() => {
     (async function checkStorage() {
-      const fullStorage = await auth.retreiveLoggedInUser();
+      const fullStorage = await retreiveLoggedInUser();
       setStorageStatus(!!fullStorage);
     }());
   }, []);
