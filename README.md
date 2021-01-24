@@ -2,7 +2,7 @@
 *bubble your thoughts together by syncing them between your phone and code editor*
 
 ## demo
-[![thoughtBubble demo video](./demo-screenshot.png)](https://www.youtube.com/watch?v=Cnm7NbBWU6c&feature=youtu.be)
+<a href="https://www.youtube.com/watch?v=Cnm7NbBWU6c" target="_blank"><img src="./demo-screenshot.png"></a>
 
 ## background & tech stack
 ThoughtBubble is an React Native application. It pairs with the [ThoughtBubble VSCode extension](https://github.com/lukehatcher/vscode-todo-extension) in order to sync and display your thoughts/ideas/notes across the mobile and desktop applications. The server is built with Node.js and Express.js and connected to a MongoDB store. The VSCode extension is built with TypeScript and React.
