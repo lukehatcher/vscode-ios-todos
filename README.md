@@ -1,10 +1,10 @@
-## this project has moved!
+# This project has moved!
 visit the new thoughtBubble repo [here](https://github.com/lukehatcher/thoughtBubble) to see the latest version!
 
-# ThoughtBubble
+## ThoughtBubble
 *bubble your thoughts together by syncing them between your phone and code editor*
 
-## demo
+## demo (outdated)
 <a href="https://www.youtube.com/watch?v=Cnm7NbBWU6c" target="_blank"><img src="./demo-screenshot.png"></a>
 
 ## background & tech stack
