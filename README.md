@@ -1,4 +1,4 @@
-# This project has moved!
+# ❌This project has moved!❌
 visit the new thoughtBubble repo [here](https://github.com/lukehatcher/thoughtBubble) to see the latest version!
 
 ## ThoughtBubble
